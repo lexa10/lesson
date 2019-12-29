@@ -22,6 +22,13 @@ public class ClientRepositoryImpl implements ClientRepository {
     }
 
     @Override
+    public boolean isPresent(Integer id) {
+        Integer count = jdbcTemplate.queryForObject(
+                "select count(*) from customers where id = ? limit 1)", Integer.class, id);
+        return count > 0;
+    }
+
+    @Override
     public int update(Client client) {
         identityMap.replace(client.getId(),client);
         return jdbcTemplate.update("update customers set name = ?, lastname = ?,  email = ? where id = ?",
